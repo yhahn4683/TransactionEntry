@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Transaction Entry</title>
+</head>
+<body>
+  <h2>Enter Transaction</h2>
+  <form id="transactionForm">
+    Date: <input type="date" name="date" required><br>
+    Description: <input type="text" name="description" required><br>
+    Category: <input type="text" name="category" required><br>
+    Amount: <input type="number" name="amount" required><br>
+    Account: <input type="text" name="account" required><br>
+    Remark: <input type="text" name="remark"><br>
+    Transfer to: <input type="text" name="transferTo"><br><br>
+    <button type="submit">Save</button>
+  </form>
+
+  <p id="result"></p>
+
+  <script>
+    const form = document.getElementById('transactionForm');
+    const scriptUrl = '여기에_웹앱_배포_URL_붙여넣기'; // Web App URL로 교체하세요
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const jsonData = Object.fromEntries(formData.entries());
+
+      const res = await fetch(scriptUrl, {
+        method: 'POST',
+        body: JSON.stringify(jsonData),
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      const text = await res.text();
+      document.getElementById('result').textContent = text === 'Success' ? '저장 완료!' : '오류 발생';
+      form.reset();
+    });
+  </script>
+</body>
+</html>
