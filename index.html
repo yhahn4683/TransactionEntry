@@ -2,8 +2,10 @@
 <html>
   <head>
     <base target="_top">
+    <title>Transaction Entry</title>
   </head>
   <body>
+    <h2>Enter Transaction</h2>
     <form id="transactionForm">
       Date: <input type="date" name="date" required><br>
       Description: <input type="text" name="description" required><br>
@@ -15,7 +17,7 @@
       <button type="submit">Save</button>
     </form>
     <p id="result"></p>
-    
+
     <script>
       const form = document.getElementById('transactionForm');
       form.addEventListener('submit', async (e) => {
