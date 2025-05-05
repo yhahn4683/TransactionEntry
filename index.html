@@ -17,29 +17,26 @@
     <button type="submit">Save</button>
   </form>
 
-  <p id="result"></p>
+  <p id="result" style="color: green;"></p>
 
   <script>
     const form = document.getElementById('transactionForm');
 
-    // 👇 여기에 본인의 Google Apps Script 배포 주소 넣으세요
+    // ✅ 정확한 Google Apps Script 웹앱 주소
     const scriptUrl = 'https://script.google.com/macros/s/AKfycbxa-D0CNwBKK_xrnpt1_GMaNpOKVNDzZGk2pRf-06mYCrUeZXy1BZ83JMcgUJOZG23b/exec';
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
       const formData = new FormData(form);
       const jsonData = Object.fromEntries(formData.entries());
 
       try {
-        const res = await 
-fetch(scriptUrl, {
-  method: 'POST',
-  body: JSON.stringify(jsonData),
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
-
+        const res = await fetch(scriptUrl, {
+          method: 'POST',
+          body: JSON.stringify(jsonData),
+          headers: { 'Content-Type': 'application/json' }
+        });
 
         const text = await res.text();
         document.getElementById('result').textContent =
@@ -48,8 +45,4 @@ fetch(scriptUrl, {
         form.reset();
       } catch (err) {
         document.getElementById('result').textContent = '전송 실패: ' + err.message;
-      }
-    });
-  </script>
-</body>
-</html>
+        document.get
