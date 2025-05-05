@@ -1,37 +1,40 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <base target="_top">
-    <title>Transaction Entry</title>
-  </head>
-  <body>
-    <h2>Enter Transaction</h2>
-    <form id="transactionForm">
-      Date: <input type="date" name="date" required><br>
-      Description: <input type="text" name="description" required><br>
-      Category: <input type="text" name="category" required><br>
-      Amount: <input type="number" name="amount" required><br>
-      Account: <input type="text" name="account" required><br>
-      Remark: <input type="text" name="remark"><br>
-      Transfer to: <input type="text" name="transferTo"><br><br>
-      <button type="submit">Save</button>
-    </form>
-    <p id="result"></p>
+<head>
+  <meta charset="UTF-8">
+  <title>Transaction Entry</title>
+</head>
+<body>
+  <h2>Enter Transaction</h2>
+  <form id="transactionForm">
+    Date: <input type="date" name="date" required><br>
+    Description: <input type="text" name="description" required><br>
+    Category: <input type="text" name="category" required><br>
+    Amount: <input type="number" name="amount" required><br>
+    Account: <input type="text" name="account" required><br>
+    Remark: <input type="text" name="remark"><br>
+    Transfer to: <input type="text" name="transferTo"><br><br>
+    <button type="submit">Save</button>
+  </form>
 
-    <script>
-      const form = document.getElementById('transactionForm');
+  <p id="result"></p>
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(form);
-        const jsonData = Object.fromEntries(formData.entries());
+  <script>
+    const form = document.getElementById('transactionForm');
 
-        const res = await fetch(window.location.href, {
+    // 👇 여기에 본인의 Google Apps Script 배포 주소 넣으세요
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbxa-D0CNwBKK_xrnpt1_GMaNpOKVNDzZGk2pRf-06mYCrUeZXy1BZ83JMcgUJOZG23b/exec';
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const jsonData = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch(scriptUrl, {
           method: 'POST',
           body: JSON.stringify(jsonData),
-          headers: {
-            'Content-Type': 'application/json'
-          }
+          headers: { 'Content-Type': 'application/json' }
         });
 
         const text = await res.text();
@@ -39,7 +42,10 @@
           text === 'Success' ? '저장 완료!' : '오류 발생: ' + text;
 
         form.reset();
-      });
-    </script>
-  </body>
+      } catch (err) {
+        document.getElementById('result').textContent = '전송 실패: ' + err.message;
+      }
+    });
+  </script>
+</body>
 </html>
